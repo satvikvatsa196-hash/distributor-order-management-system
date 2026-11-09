@@ -1,0 +1,4 @@
+Add this to package.json:
+"prisma": {
+  "seed": "npx tsx prisma/seed.ts"
+}

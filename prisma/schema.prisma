@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  phone              String   @unique
+  name               String
+  role               String // RETAILER, SALESMAN, ORDER_DESK, ADMIN
+  shopName           String?
+  address            String?
+  creditLimit        Float    @default(50000)
+  creditUsed         Float    @default(0)
+  assignedSalesmanId String?
+  assignedSalesman   User?    @relation("SalesmanRetailers", fields: [assignedSalesmanId], references: [id])
+  retailers          User[]   @relation("SalesmanRetailers")
+  orders             Order[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Product {
+  id                String      @id @default(cuid())
+  skuCode           String      @unique
+  name              String
+  nameHindi         String?
+  description       String?
+  category          String
+  mrp               Float
+  dealerPrice       Float
+  retailerPrice     Float // Price for the retailer (may differ per retailer in real app, simplified here)
+  unit              String // "case" or "piece"
+  unitsPerCase      Int         @default(1)
+  gstRate           Float       @default(18)
+  gstInclusive      Boolean     @default(true)
+  imageUrl          String?
+  stock             Int         @default(0)
+  lowStockThreshold Int         @default(10)
+  isActive          Boolean     @default(true)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  schemes           Scheme[]
+  orderItems        OrderItem[]
+  aliases           SkuAlias[]
+}
+
+model Scheme {
+  id              String    @id @default(cuid())
+  productId       String
+  product         Product   @relation(fields: [productId], references: [id])
+  type            String // "BUY_X_GET_Y" or "SLAB_DISCOUNT"
+  // For BUY_X_GET_Y: buy minQty, get freeQty free
+  // For SLAB_DISCOUNT: buy minQty or more, get discountPercent off
+  minQty          Int
+  freeQty         Int       @default(0)
+  discountPercent Float     @default(0)
+  description     String
+  isActive        Boolean   @default(true)
+  startDate       DateTime  @default(now())
+  endDate         DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  status      String      @default("PENDING") // PENDING, CONFIRMED, CREDIT_HOLD, DISPATCHED, DELIVERED, CANCELLED
+  subtotal    Float
+  discount    Float       @default(0)
+  freeGoods   String? // JSON string of free goods
+  total       Float
+  gstAmount   Float       @default(0)
+  notes       String?
+  source      String      @default("APP") // APP, AI_TEXT, AI_IMAGE, AI_VOICE, SALESMAN
+  aiConfidence Float?
+  aiRawInput  String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  quantity     Int
+  unitPrice    Float
+  total        Float
+  isFreeGood   Boolean  @default(false)
+  originalText String? // The original text from AI parsing
+  confidence   Float? // AI confidence for this line
+  alternatives String? // JSON string of alternative SKU suggestions
+  createdAt    DateTime @default(now())
+}
+
+model SkuAlias {
+  id         String   @id @default(cuid())
+  alias      String
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  retailerId String? // If specific to a retailer
+  language   String   @default("hi") // hi, en
+  createdAt  DateTime @default(now())
+
+  @@unique([alias, retailerId])
+}

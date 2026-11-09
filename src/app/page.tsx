@@ -1,69 +1,175 @@
-import Image from "next/image";
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { CartProvider } from "@/lib/cart-context"
+import { Navbar } from "@/components/navbar"
+import { CatalogueView } from "@/components/catalogue-view"
+import { OrdersView } from "@/components/orders-view"
+import { OrderDeskView } from "@/components/order-desk-view"
+import { InactiveRetailersView } from "@/components/inactive-retailers-view"
+import { AIOrderModal } from "@/components/ai-order-modal"
+import { CartDrawer } from "@/components/cart-drawer"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { CheckCircle2, AlertCircle, ShoppingBag, ArrowRight } from "lucide-react"
 
 export default function Home() {
+  const [currentTab, setCurrentTab] = useState<string>("catalogue")
+  const [language, setLanguage] = useState<"en" | "hi">("en")
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
+  const [lastPlacedOrder, setLastPlacedOrder] = useState<any | null>(null)
+
+  const handleOrderSuccess = (order: any) => {
+    setLastPlacedOrder(order)
+  }
+
+  const handleStartOrderForRetailer = (retailer: any) => {
+    // Salesman mode: switch to this retailer
+    fetch("/api/auth/demo-switch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: retailer.phone }),
+    }).then(() => {
+      window.location.reload()
+    })
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <CartProvider>
+      <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-blue-100">
+        {/* Navigation Bar */}
+        <Navbar
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          onOpenCart={() => setIsCartOpen(true)}
+          onOpenAIModal={() => setIsAIModalOpen(true)}
+          language={language}
+          setLanguage={setLanguage}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+
+        {/* Main View Area */}
+        <main className="flex-1 pb-16">
+          {currentTab === "catalogue" && (
+            <CatalogueView
+              language={language}
+              onOpenAIModal={() => setIsAIModalOpen(true)}
+              onOpenCart={() => setIsCartOpen(true)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+          )}
+
+          {currentTab === "orders" && (
+            <OrdersView
+              language={language}
+              onNavigateCatalogue={() => setCurrentTab("catalogue")}
+            />
+          )}
+
+          {currentTab === "order_desk" && (
+            <OrderDeskView language={language} />
+          )}
+
+          {currentTab === "inactive_retailers" && (
+            <InactiveRetailersView
+              language={language}
+              onStartOrderForRetailer={handleStartOrderForRetailer}
+            />
+          )}
+        </main>
+
+        {/* Modals & Drawers */}
+        <AIOrderModal
+          isOpen={isAIModalOpen}
+          onClose={() => setIsAIModalOpen(false)}
+          language={language}
+        />
+
+        <CartDrawer
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          language={language}
+          onOrderSuccess={handleOrderSuccess}
+        />
+
+        {/* Order Placement Confirmation Modal */}
+        <Dialog
+          open={!!lastPlacedOrder}
+          onOpenChange={() => setLastPlacedOrder(null)}
+        >
+          <DialogContent className="max-w-sm text-center">
+            {lastPlacedOrder && (
+              <div className="py-4 space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-7 h-7" />
+                </div>
+
+                <DialogTitle className="text-lg font-bold text-slate-900">
+                  {lastPlacedOrder.status === "CREDIT_HOLD"
+                    ? "Order Placed (Credit Review)"
+                    : "Order Placed Successfully!"}
+                </DialogTitle>
+
+                <DialogDescription className="text-xs text-slate-500">
+                  Order Ref: <strong className="text-slate-800 font-mono">{lastPlacedOrder.orderNumber}</strong>
+                </DialogDescription>
+
+                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-left space-y-1">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Total Cases:</span>
+                    <strong className="text-slate-800">
+                      {lastPlacedOrder.items?.reduce((s: number, i: any) => s + i.quantity, 0)} cases
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Total Amount:</span>
+                    <strong className="text-blue-700 font-mono text-sm">
+                      ₹{lastPlacedOrder.total?.toFixed(2)}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Status:</span>
+                    <strong className={lastPlacedOrder.status === "CREDIT_HOLD" ? "text-amber-700" : "text-emerald-700"}>
+                      {lastPlacedOrder.status}
+                    </strong>
+                  </div>
+                </div>
+
+                {lastPlacedOrder.status === "CREDIT_HOLD" && (
+                  <p className="text-[11px] text-amber-800 bg-amber-50 p-2 rounded border border-amber-200">
+                    This order exceeded available credit. The office order desk in Jabalpur has received an alert for approval.
+                  </p>
+                )}
+
+                <DialogFooter className="mt-4 flex-col gap-2">
+                  <Button
+                    onClick={() => {
+                      setLastPlacedOrder(null)
+                      setCurrentTab("orders")
+                    }}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs h-9"
+                  >
+                    View in Order History
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setLastPlacedOrder(null)}
+                    className="w-full text-xs h-9"
+                  >
+                    Continue Shopping
+                  </Button>
+                </DialogFooter>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </CartProvider>
+  )
 }
