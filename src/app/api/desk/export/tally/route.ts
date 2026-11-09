@@ -157,3 +157,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Failed to generate Tally export" }, { status: 500 })
   }
 }
+

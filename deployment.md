@@ -150,3 +150,4 @@ CMD ["npm", "start"]
 6. **14-Day Inactive Kirana Dashboard**:
    - Click **"Inactive Stores (14d)"** tab to view retailers who haven't ordered in 14+ days.
    - Click **"Visit Order"** to simulate field salesman visit ordering.
+

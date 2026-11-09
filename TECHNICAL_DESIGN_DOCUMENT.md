@@ -246,3 +246,4 @@ Per the problem statement:
 1. **Offline Background Sync via IndexedDB & Service Worker:** Full offline catalogue caching and order queuing when salesmen visit remote rural kiranas outside cellular signal.
 2. **Direct WhatsApp Webhook Integration:** Bi-directional WhatsApp Business API webhook so kirana shopkeepers can send audio voice notes or text directly to the distributor's WhatsApp number and receive a confirmation link.
 3. **Automated Tally ODBC / Direct API Connector:** Automated daemon service running on the office Windows server to post approved orders directly into Tally Prime via XML over HTTP port 9000 without requiring manual file uploads.
+

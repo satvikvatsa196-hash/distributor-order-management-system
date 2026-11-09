@@ -455,3 +455,4 @@ export function AIOrderModal({ isOpen, onClose, language }: AIOrderModalProps) {
     </Dialog>
   )
 }
+

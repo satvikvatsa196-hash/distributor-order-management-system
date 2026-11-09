@@ -91,3 +91,4 @@ if __name__ == '__main__':
     md_file = 'TECHNICAL_DESIGN_DOCUMENT.md'
     docx_file = 'TECHNICAL_DESIGN_DOCUMENT.docx'
     markdown_to_docx(md_file, docx_file)
+

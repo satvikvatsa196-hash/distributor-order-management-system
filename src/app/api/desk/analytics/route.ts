@@ -109,3 +109,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Failed to load desk analytics" }, { status: 500 })
   }
 }
+

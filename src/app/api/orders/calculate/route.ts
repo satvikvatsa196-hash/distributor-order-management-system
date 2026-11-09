@@ -77,3 +77,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to calculate schemes" }, { status: 500 })
   }
 }
+

@@ -340,3 +340,4 @@ export function OrdersView({ language, onNavigateCatalogue }: OrdersViewProps) {
     </div>
   )
 }
+
