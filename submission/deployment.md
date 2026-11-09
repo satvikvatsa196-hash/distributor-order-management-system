@@ -1,8 +1,8 @@
-# Deployment and Run Guide
+# Local Run & Evaluation Guide
 
 ## Project: Distributor Order Management System (Company A, Jabalpur)
 
-This document provides step-by-step instructions for running the application locally, deployment configuration, environment variables, and pre-configured reviewer credentials.
+This document provides step-by-step instructions for running the application locally, environment variables, pre-configured reviewer credentials, and a verification checklist.
 
 ---
 
@@ -87,48 +87,18 @@ The application will be served at `http://localhost:3000`.
 
 ---
 
-## 4. Production Cloud Deployment (Vercel / Railway / Render)
-
-### Option A: Vercel (Recommended)
-1. Push the repository to GitHub.
-2. Import the project into the [Vercel Dashboard](https://vercel.com).
-3. Framework Preset: **Next.js**
-4. Build Command: `npm run build`
-5. For serverless SQLite on Vercel, switch `DATABASE_URL` to a hosted PostgreSQL/Neon instance (or Turso libSQL). The Prisma schema supports switching `provider = "postgresql"`.
-6. Add the following environment variable names in Vercel Project Settings:
-   - `DATABASE_URL`
-   - `NEXTAUTH_SECRET`
-   - `NEXTAUTH_URL`
-   - `GEMINI_API_KEY` (Optional)
-
-### Option B: Railway / Docker (Containerized)
-The app runs seamlessly as a standalone Node.js server with the included SQLite or Postgres database.
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npx prisma generate
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
----
-
-## 5. Required Environment Variables Reference
+## 4. Required Environment Variables Reference
 
 | Variable Name | Required | Description |
 | :--- | :---: | :--- |
-| `DATABASE_URL` | **Yes** | Connection string for Prisma ORM (`file:./prisma/dev.db` for SQLite or `postgresql://...`). |
+| `DATABASE_URL` | **Yes** | Connection string for Prisma ORM (`file:./prisma/dev.db` for SQLite). |
 | `NEXTAUTH_SECRET` | **Yes** | Cryptographic secret for signing session JWT tokens. |
-| `NEXTAUTH_URL` | **Yes** | Base canonical URL of the application (`http://localhost:3000` or production domain). |
+| `NEXTAUTH_URL` | **Yes** | Base canonical URL of the application (`http://localhost:3000`). |
 | `GEMINI_API_KEY` | *Optional* | Google Gemini API key for natural language order extraction. If omitted, the deterministic offline phonetic & substring parser handles all requests with zero external network dependency. |
 
 ---
 
-## 6. Verification Checklist for the Reviewer
+## 5. Verification Checklist for the Reviewer
 
 1. **Catalogue & Stock Status**: View real FMCG sample SKUs (Glucose biscuit 75g, Detergent 1kg, Tea leaf 250g). Notice out-of-stock indicator on Tea leaf and low-stock warning on Detergent.
 2. **Real-time Scheme Engine**:

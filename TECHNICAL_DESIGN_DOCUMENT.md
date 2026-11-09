@@ -2,7 +2,7 @@
 ## Next-Generation Distributor Order Management System
 **Client:** Company A, Jabalpur (FMCG Distributor — 1,800 Kirana Stores, 4 Brands, ₹85–100 Cr/year Revenue)  
 **Project GitHub Repository:** `https://github.com/satvikvatsa196-hash/distributor-order-management-system`  
-**Live Application Demo:** `https://distributor-order-management-system.vercel.app` *(or local review at http://localhost:3000)*  
+**Evaluation Mode:** Local Review at `http://localhost:3000` *(Step-by-step in `deployment.md`)*  
 **Author / Lead Engineer:** Software Engineering Candidate  
 **Date:** November 2026  
 

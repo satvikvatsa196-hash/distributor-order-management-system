@@ -345,7 +345,7 @@ def build_technical_document():
         [
             "Client: Company A, Jabalpur (FMCG Distributor — 1,800 Kiranas, 4 Brands, ₹85–100 Cr/year Revenue)",
             "Project GitHub Repository: https://github.com/satvikvatsa196-hash/distributor-order-management-system",
-            "Live Production Demo: https://distributor-order-management-system.vercel.app  (or local http://localhost:3000)",
+            "Evaluation & Review Mode: Local Execution at http://localhost:3000 (Detailed in deployment.md)",
             "Lead Systems Architect: Software Engineering Candidate",
             "Target Environment: Next.js 16 (App Router), Prisma ORM 6.4.1, SQLite/PostgreSQL, Tailwind CSS, Google Gemini 2.0",
             "Document Date: November 2026 | Document Status: Approved for Technical Evaluation"
