@@ -255,10 +255,29 @@ def table_grid(headers, rows, col_widths):
 def build_technical_document():
     doc_elements = []
 
+    # Prominent Top GitHub Bar (Mandated by Evaluation Guidelines)
+    top_bar_p = '''<w:p>
+        <w:pPr>
+            <w:spacing w:before="60" w:after="160"/>
+            <w:pBdr><w:bottom w:val="single" w:sz="6" w:space="8" w:color="CBD5E1"/></w:pBdr>
+            <w:jc w:val="both"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+                <w:b/>
+                <w:sz w:val="18"/>
+                <w:color w:val="475569"/>
+            </w:rPr>
+            <w:t>PROJECT SUBMISSION &amp; TECHNICAL ARCHITECTURE  |  COMPANY A, JABALPUR</w:t>
+        </w:r>
+    </w:p>'''
+    doc_elements.append(top_bar_p)
+
     # Document Header / Title
     title_p = '''<w:p>
         <w:pPr>
-            <w:spacing w:before="240" w:after="80"/>
+            <w:spacing w:before="180" w:after="80"/>
             <w:jc w:val="center"/>
         </w:pPr>
         <w:r>
@@ -275,7 +294,7 @@ def build_technical_document():
 
     subtitle_p = '''<w:p>
         <w:pPr>
-            <w:spacing w:before="0" w:after="240"/>
+            <w:spacing w:before="0" w:after="140"/>
             <w:jc w:val="center"/>
         </w:pPr>
         <w:r>
@@ -289,6 +308,36 @@ def build_technical_document():
         </w:r>
     </w:p>'''
     doc_elements.append(subtitle_p)
+
+    # Prominent Centered GitHub Repository Link
+    github_link_p = '''<w:p>
+        <w:pPr>
+            <w:spacing w:before="40" w:after="220"/>
+            <w:jc w:val="center"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+                <w:b/>
+                <w:sz w:val="22"/>
+                <w:color w:val="0F172A"/>
+            </w:rPr>
+            <w:t>GitHub Repository: </w:t>
+        </w:r>
+        <w:hyperlink r:id="rIdGitHub">
+            <w:r>
+                <w:rPr>
+                    <w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+                    <w:b/>
+                    <w:u w:val="single"/>
+                    <w:sz w:val="22"/>
+                    <w:color w:val="2563EB"/>
+                </w:rPr>
+                <w:t>https://github.com/satvikvatsa196-hash/distributor-order-management-system</w:t>
+            </w:r>
+        </w:hyperlink>
+    </w:p>'''
+    doc_elements.append(github_link_p)
 
     # Executive Metadata Box
     metadata_box = callout_box(
@@ -735,6 +784,7 @@ def build_technical_document():
     doc_rels = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+  <Relationship Id="rIdGitHub" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://github.com/satvikvatsa196-hash/distributor-order-management-system" TargetMode="External"/>
 </Relationships>'''
 
     styles_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
