@@ -30,7 +30,7 @@ The application features an **instant role switcher** in the top navigation bar,
 
 ### Step 1: Clone and Enter the Directory
 ```bash
-git clone <GITHUB_REPOSITORY_URL>
+git clone https://github.com/satvikvatsa196-hash/distributor-order-management-system.git
 cd distributor-order-management-system
 ```
 
@@ -150,3 +150,4 @@ CMD ["npm", "start"]
 6. **14-Day Inactive Kirana Dashboard**:
    - Click **"Inactive Stores (14d)"** tab to view retailers who haven't ordered in 14+ days.
    - Click **"Visit Order"** to simulate field salesman visit ordering.
+

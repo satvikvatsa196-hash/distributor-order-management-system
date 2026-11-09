@@ -1,7 +1,7 @@
 # Technical Design Document (TDD)
 ## Next-Generation Distributor Order Management System
 **Client:** Company A, Jabalpur (FMCG Distributor — 1,800 Kirana Stores, 4 Brands, ₹85–100 Cr/year Revenue)  
-**Project GitHub Repository:** `https://github.com/satvik-vatsa/distributor-order-management-system`  
+**Project GitHub Repository:** `https://github.com/satvikvatsa196-hash/distributor-order-management-system`  
 **Live Application Demo:** `https://distributor-order-management-system.vercel.app` *(or local review at http://localhost:3000)*  
 **Author / Lead Engineer:** Software Engineering Candidate  
 **Date:** November 2026  
@@ -246,3 +246,4 @@ Per the problem statement:
 1. **Offline Background Sync via IndexedDB & Service Worker:** Full offline catalogue caching and order queuing when salesmen visit remote rural kiranas outside cellular signal.
 2. **Direct WhatsApp Webhook Integration:** Bi-directional WhatsApp Business API webhook so kirana shopkeepers can send audio voice notes or text directly to the distributor's WhatsApp number and receive a confirmation link.
 3. **Automated Tally ODBC / Direct API Connector:** Automated daemon service running on the office Windows server to post approved orders directly into Tally Prime via XML over HTTP port 9000 without requiring manual file uploads.
+
